@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const analyticsController_1 = require("../controllers/analyticsController");
+const router = (0, express_1.Router)();
+router.get("/metrics/latest", analyticsController_1.getLatestMetrics);
+router.get("/dashboard", analyticsController_1.getDashboard);
+router.get("/dashboard/trafficAnalysis", analyticsController_1.getTrafficAnalysis);
+router.get("/dashboard/topCountries", analyticsController_1.getTopCountries);
+router.get("/dashboard/acquisitionChannels", analyticsController_1.getAcquisitionChannels);
+router.get("/dashboard/pagePerformance", analyticsController_1.getPagePerformance);
+router.get("/dashboard/productRevenue", analyticsController_1.getProductRevenue);
+router.get("/dashboard/cohortRetention", analyticsController_1.getCohortRetention);
+exports.default = router;

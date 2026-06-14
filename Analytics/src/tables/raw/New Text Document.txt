@@ -1,0 +1,83 @@
+-- Raw tables Events and Sessions in Public Schema (Supabase)
+
+-- EVENTS TABLE
+
+create table public.events (
+  id text not null,
+  project_id text not null,
+  session_id text not null,
+  user_id text null,
+  event text not null,
+  path text null,
+  url text null,
+  ts timestamp without time zone not null,
+  anonymous_id text null,
+  page_url text null,
+  referrer text null,
+  user_agent text null,
+  source text null,
+  medium text null,
+  campaign text null,
+  is_new_user boolean null,
+  device_type text null,
+  platform text null,
+  order_id text null,
+  value numeric(12, 2) null,
+  currency text null,
+  product_id text null,
+  category text null,
+  cart_value numeric(12, 2) null,
+  quantity integer null,
+  ip text null,
+  event_properties jsonb null,
+  raw_payload jsonb null,
+  idempotency_key text null,
+  constraint events_pkey primary key (id),
+  constraint events_project_id_fkey foreign KEY (project_id) references app.projects (id) on delete CASCADE,
+  constraint events_session_id_fkey foreign KEY (session_id) references sessions (id) on update CASCADE on delete RESTRICT
+) TABLESPACE pg_default;
+
+create index IF not exists events_project_id_event_idx on public.events using btree (project_id, event) TABLESPACE pg_default;
+
+create index IF not exists events_project_id_ts_idx on public.events using btree (project_id, ts) TABLESPACE pg_default;
+
+create index IF not exists events_session_id_idx on public.events using btree (session_id) TABLESPACE pg_default;
+
+create unique INDEX IF not exists event_idempotency_key_unique on public.events using btree (project_id, idempotency_key) TABLESPACE pg_default
+where
+  (idempotency_key is not null);
+
+create index IF not exists events_project_session_idx on public.events using btree (project_id, session_id) TABLESPACE pg_default;
+
+-- SESSIONS TABLE
+
+create table public.sessions (
+  id text not null,
+  project_id text not null,
+  user_id text null,
+  started_at timestamp without time zone not null default CURRENT_TIMESTAMP,
+  ended_at timestamp without time zone null,
+  duration integer null,
+  bounced boolean not null default true,
+  country text null,
+  region text null,
+  city text null,
+  device text null,
+  browser text null,
+  os text null,
+  source text null,
+  medium text null,
+  campaign text null,
+  referrer text null,
+  entry_page text null,
+  anonymous_id text null,
+  is_new_user boolean null,
+  ip text null,
+  platform text null,
+  constraint sessions_pkey primary key (id),
+  constraint sessions_project_id_fkey foreign KEY (project_id) references app.projects (id) on delete CASCADE
+) TABLESPACE pg_default;
+
+create index IF not exists sessions_project_id_idx on public.sessions using btree (project_id) TABLESPACE pg_default;
+
+create index IF not exists sessions_started_at_idx on public.sessions using btree (started_at) TABLESPACE pg_default;
