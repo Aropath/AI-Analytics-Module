@@ -25,6 +25,5 @@ app.use((err, _req, res, _next) => {
 const PORT = parseInt(process.env.PORT || "5001", 10);
 app.listen(PORT, () => {
     console.log(`\n📊 Analytics service running on http://localhost:${PORT}`);
-    console.log(`   Auth service: ${process.env.AUTH_SERVICE_URL || "http://localhost:5000"}\n`);
 });
 exports.default = app;
