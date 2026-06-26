@@ -9,6 +9,10 @@ import {
   getProductRevenue,
   getCohortRetention,
 } from "../controllers/analyticsController";
+import {
+  getGrowthChecklist,
+  markChecklistItemCompleted,
+} from "../controllers/checklistController";
 
 const router = Router();
 
@@ -21,5 +25,7 @@ router.get("/dashboard/acquisitionChannels", getAcquisitionChannels);
 router.get("/dashboard/pagePerformance", getPagePerformance);
 router.get("/dashboard/productRevenue", getProductRevenue);
 router.get("/dashboard/cohortRetention", getCohortRetention);
+router.get("/dashboard/growthChecklist", getGrowthChecklist);
+router.post("/dashboard/growthChecklist/:itemId/complete", markChecklistItemCompleted);
 
 export default router;
