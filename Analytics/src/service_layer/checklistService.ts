@@ -1,4 +1,5 @@
 import { query } from "./db";
+import { createChecklistNotification } from "./notificationService";
 import { fetchDashboardData } from "./dashboard";
 import { fetchPagePerformance } from "./pagePerformance";
 import { evaluateChecklistRules, ChecklistMetrics } from "./checklistRules";
@@ -104,6 +105,17 @@ export async function fetchGrowthChecklist(
       ]
     );
   }
+
+  if (generated.length > 0) {
+  try {
+    await createChecklistNotification(
+      projectId,
+      generated.map((item) => item.title)
+    );
+  } catch (err) {
+    console.error("Failed to send checklist notification:", err);
+  }
+}
 
   const rows = await query<ChecklistRow>(
     `
